@@ -1,5 +1,17 @@
 #include "imuRecord.hpp"
 
+void ImuRecord::Initialize(){
+    this->timestamp = 0;
+    this->gyro_x = 0;
+    this->gyro_y = 0;
+    this->gyro_z = 0;
+    this->acc_x = 0;
+    this->acc_y = 0;
+    this->acc_z = 0;
+    this->conf_gyro = 0;
+    this->conf_acc = 0;
+}
+
 void ImuRecord::convertData(std::string ts, std::string gx, 
                         std::string gy, std::string gz,
                         std::string ax, std::string ay,

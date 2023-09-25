@@ -1,21 +1,27 @@
-#pragma once
+#ifndef IMURECORD_H
+#define IMURECORD_H
+ 
 
 #include <string>
 
 class ImuRecord{
     public:
-        float timestamp;
-        float gyro_x;
-        float gyro_y;
-        float gyro_z;
-        float acc_x;
-        float acc_y;
-        float acc_z;
-        float conf_gyro;
-        float conf_acc;
+        long double timestamp; 
+        long double gyro_x;
+        long double gyro_y;
+        long double gyro_z;
+        long double acc_x;
+        long double acc_y;
+        long double acc_z;
+        long double conf_gyro;
+        long double conf_acc;
+        int count = 0;
+        void Initialize();
         void convertData(std::string ts, std::string gx, 
                         std::string gy, std::string gz,
                         std::string ax, std::string ay,
                         std::string az, std::string cg,
-                        std::string ca){};
+                        std::string ca);
 };
+
+#endif
