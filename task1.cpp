@@ -6,23 +6,17 @@
 
 using namespace std;
 
-int main () {
-
-    vector<ImuRecord> imuData;
-    
-    
+void imuReader(vector<ImuRecord> *imuD){
     ifstream file;
     file.open("imu.csv");
     string line, word;
     getline(file, line);
     while (getline(file, line)) {
-        //vector<string> row;
         ImuRecord imu;
         imu.Initialize();
         stringstream ss(line);
         int index=0;
         while (getline(ss, word, ',')) {
-            //row.push_back(word);
             switch (index)
             {
             case 0 :
@@ -58,12 +52,20 @@ int main () {
             index++;
         }
         imu.count = index;
-        imuData.push_back(imu);
+        imuD->push_back(imu);
     }
     file.close();
+}
+
+int main () {
+
+    vector<ImuRecord> *imuData = new vector<ImuRecord>();
     
-    for(int i=0; i<imuData.size(); i++){
-        printf("%Lf,%Lf,%Lf,%Lf,%Lf,%Lf,%Lf,%Lf,%.15Lf\n", imuData[i].timestamp, imuData[i].gyro_x, imuData[i].gyro_y, imuData[i].gyro_z, imuData[i].acc_x, imuData[i].acc_y, imuData[i].acc_z, imuData[i].conf_gyro, imuData[i].conf_acc);
+    imuReader(imuData);
+    
+    //imu-data-check
+    for(int i=0; i<imuData->size(); i++){
+        printf("%Lf,%Lf,%Lf,%Lf,%Lf,%Lf,%Lf,%Lf,%.15Lf\n", imuData->at(i).timestamp, imuData->at(i).gyro_x, imuData->at(i).gyro_y, imuData->at(i).gyro_z, imuData->at(i).acc_x, imuData->at(i).acc_y, imuData->at(i).acc_z, imuData->at(i).conf_gyro, imuData->at(i).conf_acc); 
     }
     
     return 0;
