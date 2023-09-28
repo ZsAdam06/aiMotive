@@ -8,7 +8,7 @@ using namespace std;
 
 void imuReader(vector<ImuRecord> *imuD){
     ifstream file;
-    file.open("./data/imu.csv");
+    file.open("./imu.csv");
     string line, word;
     getline(file, line);
     while (getline(file, line)) {

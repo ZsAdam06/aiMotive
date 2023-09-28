@@ -135,6 +135,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dbwParser.cpp" />
+    <ClCompile Include="dbwRecord.cpp" />
+    <ClCompile Include="imuParser.cpp" />
+    <ClCompile Include="imuRecord.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="vendor\ImGui\backends\imgui_impl_dx11.cpp" />
     <ClCompile Include="vendor\ImGui\backends\imgui_impl_win32.cpp" />
@@ -143,16 +147,26 @@
     <ClCompile Include="vendor\ImGui\imgui_draw.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_tables.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="vendor\ImGui\implot.cpp" />
+    <ClCompile Include="vendor\ImGui\implot_items.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dbwRecord.hpp" />
+    <ClInclude Include="imuRecord.hpp" />
     <ClInclude Include="vendor\ImGui\backends\imgui_impl_dx11.h" />
     <ClInclude Include="vendor\ImGui\backends\imgui_impl_win32.h" />
     <ClInclude Include="vendor\ImGui\imconfig.h" />
     <ClInclude Include="vendor\ImGui\imgui.h" />
     <ClInclude Include="vendor\ImGui\imgui_internal.h" />
+    <ClInclude Include="vendor\ImGui\implot.h" />
+    <ClInclude Include="vendor\ImGui\implot_internal.h" />
     <ClInclude Include="vendor\ImGui\imstb_rectpack.h" />
     <ClInclude Include="vendor\ImGui\imstb_textedit.h" />
     <ClInclude Include="vendor\ImGui\imstb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dbw.csv" />
+    <None Include="imu.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

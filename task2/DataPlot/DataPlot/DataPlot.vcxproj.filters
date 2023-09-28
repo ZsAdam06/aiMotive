@@ -39,6 +39,24 @@
     <ClCompile Include="vendor\ImGui\backends\imgui_impl_win32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="vendor\ImGui\implot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\implot_items.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imuRecord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imuParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dbwRecord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dbwParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\ImGui\imconfig.h">
@@ -65,5 +83,21 @@
     <ClInclude Include="vendor\ImGui\backends\imgui_impl_win32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="vendor\ImGui\implot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\implot_internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imuRecord.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dbwRecord.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dbw.csv" />
+    <None Include="imu.csv" />
   </ItemGroup>
 </Project>
