@@ -18,6 +18,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 #include <time.h>
 
 // Data
@@ -44,19 +45,19 @@ void RenderMenuBar(bool* sp1, bool* sp2, bool* sp3) {
     ImGui::BeginMenuBar();
     ImGui::Text("aiMotive");
     ImGui::SetCursorPosX(ImGui::GetWindowSize().x-600);
-    if (ImGui::Button("Plot1", ImVec2(200, 20))) {
+    if (ImGui::Button("Speed", ImVec2(200, 20))) {
         *sp1 = true;
         *sp2 = false;
         *sp3 = false;
     }
     ImGui::SameLine(0, 0);
-    if (ImGui::Button("Plot2", ImVec2(200, 20))) {
+    if (ImGui::Button("Wheels", ImVec2(200, 20))) {
         *sp1 = false;
         *sp2 = true;
         *sp3 = false;
     }
     ImGui::SameLine(0, 0);
-    if (ImGui::Button("Plot3", ImVec2(200, 20))) {
+    if (ImGui::Button("Accelerations", ImVec2(200, 20))) {
         *sp1 = false;
         *sp2 = false;
         *sp3 = true;
@@ -67,105 +68,92 @@ void RenderMenuBar(bool* sp1, bool* sp2, bool* sp3) {
 void makePlot1() {
     std::vector<DbwRecord>* dbwData = new std::vector<DbwRecord>();
     dbwReader(dbwData);
-    int count = dbwData->size();
-    static float long xs1[1001], ys1[1001];
+    static int count = dbwData->size();
+    static double* xs1 = new double[count]();
+    static double* ys1 = new double[count]();
 
-    for (int i = 0; i < 1001; i++) {
+    for (int i = 0; i < count; i++) {
         xs1[i] = dbwData->at(i).timestamp;
         ys1[i] = dbwData->at(i).speed;
     }
 
-    ImGui::SetCursorPos(ImVec2(0,50));
-    if (ImPlot::BeginPlot("Line Plots")) {
+    ImPlot::SetNextFillStyle(ImVec4(40.0f / 255.0f, 48.0f / 255.0f, 51.0f / 255.0f, 1.0f));
+    if (ImPlot::BeginPlot("Speed of the car")) {
         ImPlot::SetupAxes("Timestamp", "Speed");
-        ImPlot::PlotLine("f(x)", xs1, ys1, 1001);
+        ImPlot::PlotLine("Speed", xs1, ys1, count);
         ImPlot::EndPlot();
     }
 }
 
-//just for test
-template <typename T>
-inline T RandomRange(T min, T max) {
-    T scale = rand() / (T)RAND_MAX;
-    return min + scale * (max - min);
-}
-
 void makePlot2() {
-    static float xs[1001], ys[1001], ys1[1001], ys2[1001], ys3[1001], ys4[1001];
-    srand(0);
-    for (int i = 0; i < 1001; ++i) {
-        xs[i] = i * 0.001f;
-        ys[i] = 0.25f + 0.25f * sinf(25 * xs[i]) * sinf(5 * xs[i]) + RandomRange(-0.01f, 0.01f);
-        ys1[i] = ys[i] + RandomRange(0.1f, 0.12f);
-        ys2[i] = ys[i] - RandomRange(0.1f, 0.12f);
-        ys3[i] = 0.75f + 0.2f * sinf(25 * xs[i]);
-        ys4[i] = 0.75f + 0.1f * cosf(25 * xs[i]);
-    }
-    static float alpha = 0.25f;
-    ImGui::DragFloat("Alpha", &alpha, 0.01f, 0, 1);
+    std::vector<DbwRecord>* dbwData = new std::vector<DbwRecord>();
+    dbwReader(dbwData);
+    static int count = dbwData->size();
+    double* xs = new double[count]();
+    double* ys = new double[count]();
+    double* ys1 = new double[count]();
+    double* ys2 = new double[count]();
+    double* ys3 = new double[count]();
+    double* ys4 = new double[count]();
 
-    if (ImPlot::BeginPlot("Shaded Plots")) {
-        ImPlot::PushStyleVar(ImPlotStyleVar_FillAlpha, alpha);
-        ImPlot::PlotShaded("Uncertain Data", xs, ys1, ys2, 1001);
-        ImPlot::PlotLine("Uncertain Data", xs, ys, 1001);
-        ImPlot::PlotShaded("Overlapping", xs, ys3, ys4, 1001);
-        ImPlot::PlotLine("Overlapping", xs, ys3, 1001);
-        ImPlot::PlotLine("Overlapping", xs, ys4, 1001);
-        ImPlot::PopStyleVar();
+    for (int i = 0; i < count; i++) {
+        xs[i] = dbwData->at(i).timestamp;
+        ys[i] = dbwData->at(i).speed;
+        ys1[i] = dbwData->at(i).v_front_left;
+        ys2[i] = dbwData->at(i).v_front_right;
+        ys3[i] = dbwData->at(i).v_rear_left;
+        ys4[i] = dbwData->at(i).v_rear_right;
+    }
+    
+    
+    if (ImPlot::BeginPlot("Speed of the car and the velocity of the wheels\n(the first 15 records)")) {
+        ImPlot::PlotLine("Speed", xs, ys, 15);
+        ImPlot::PlotLine("Front left", xs, ys1, 15);
+        ImPlot::PlotLine("Front right", xs, ys2, 15);
+        ImPlot::PlotLine("Rear left", xs, ys3, 15);
+        ImPlot::PlotLine("Rear right", xs, ys4, 15);
         ImPlot::EndPlot();
     }
 }
 
 void makePlot3() {
-    static double xs1[101], ys1[101], ys2[101], ys3[101];
-    srand(0);
-    for (int i = 0; i < 101; ++i) {
-        xs1[i] = (float)i;
-        ys1[i] = RandomRange(400.0, 450.0);
-        ys2[i] = RandomRange(275.0, 350.0);
-        ys3[i] = RandomRange(150.0, 225.0);
+    std::vector<DbwRecord>* dbwData = new std::vector<DbwRecord>();
+    dbwReader(dbwData);
+    std::vector<ImuRecord>* imuData = new std::vector<ImuRecord>();
+    imuReader(imuData);
+    static int imuCount = imuData->size();
+    static int dbwCount = dbwData->size();
+    int count;
+    if (imuCount < dbwCount) {
+        count = imuCount;
     }
-    static bool show_lines = true;
-    static bool show_fills = true;
-    static float fill_ref = 0;
-    static int shade_mode = 0;
-    static ImPlotShadedFlags flags = 0;
-    ImGui::Checkbox("Lines", &show_lines); ImGui::SameLine();
-    ImGui::Checkbox("Fills", &show_fills);
-    if (show_fills) {
-        ImGui::SameLine();
-        if (ImGui::RadioButton("To -INF", shade_mode == 0))
-            shade_mode = 0;
-        ImGui::SameLine();
-        if (ImGui::RadioButton("To +INF", shade_mode == 1))
-            shade_mode = 1;
-        ImGui::SameLine();
-        if (ImGui::RadioButton("To Ref", shade_mode == 2))
-            shade_mode = 2;
-        if (shade_mode == 2) {
-            ImGui::SameLine();
-            ImGui::SetNextItemWidth(100);
-            ImGui::DragFloat("##Ref", &fill_ref, 1, -100, 500);
-        }
+    else {
+        count = dbwCount;
+    }
+    double* xs = new double[count]();
+    double* ys = new double[count]();
+    double* ys1 = new double[count]();
+    double* ys2 = new double[count]();
+    double* ys3 = new double[count]();
+
+    
+    for (int i = 0; i < count; i++) {
+        xs[i] = dbwData->at(i).timestamp;
+        ys[i] = dbwData->at(i).speed;
+        ys1[i] = imuData->at(i).acc_x;
+        ys2[i] = imuData->at(i).acc_y;
+        ys3[i] = imuData->at(i).acc_z;
     }
 
-    if (ImPlot::BeginPlot("Stock Prices")) {
-        ImPlot::SetupAxes("Days", "Price");
-        ImPlot::SetupAxesLimits(0, 100, 0, 500);
-        if (show_fills) {
-            ImPlot::PushStyleVar(ImPlotStyleVar_FillAlpha, 0.25f);
-            ImPlot::PlotShaded("Stock 1", xs1, ys1, 101, shade_mode == 0 ? -INFINITY : shade_mode == 1 ? INFINITY : fill_ref, flags);
-            ImPlot::PlotShaded("Stock 2", xs1, ys2, 101, shade_mode == 0 ? -INFINITY : shade_mode == 1 ? INFINITY : fill_ref, flags);
-            ImPlot::PlotShaded("Stock 3", xs1, ys3, 101, shade_mode == 0 ? -INFINITY : shade_mode == 1 ? INFINITY : fill_ref, flags);
-            ImPlot::PopStyleVar();
-        }
-        if (show_lines) {
-            ImPlot::PlotLine("Stock 1", xs1, ys1, 101);
-            ImPlot::PlotLine("Stock 2", xs1, ys2, 101);
-            ImPlot::PlotLine("Stock 3", xs1, ys3, 101);
-        }
+
+    if (ImPlot::BeginPlot("Speed of the car and accelerations")) {
+        ImPlot::PlotLine("Speed", xs, ys, count);
+        ImPlot::PlotLine("Acc_X", xs, ys1, count);
+        ImPlot::PlotLine("Acc_Y", xs, ys2, count);
+        ImPlot::PlotLine("Acc_Z", xs, ys3, count);
         ImPlot::EndPlot();
     }
+    
 }
 
 // Main code
@@ -175,7 +163,7 @@ int main(int, char**)
     //ImGui_ImplWin32_EnableDpiAwareness();
     WNDCLASSEXW wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"ImGui Example", nullptr };
     ::RegisterClassExW(&wc);
-    HWND hwnd = ::CreateWindowW(wc.lpszClassName, L"aiMotive Test Project", WS_OVERLAPPEDWINDOW, 100, 100, 1215, 588, nullptr, nullptr, wc.hInstance, nullptr);
+    HWND hwnd = ::CreateWindowW(wc.lpszClassName, L"aiMotive Test Project", WS_OVERLAPPEDWINDOW, 100, 100, 1215, 388, nullptr, nullptr, wc.hInstance, nullptr);
 
     // Initialize Direct3D
     if (!CreateDeviceD3D(hwnd))
@@ -224,7 +212,8 @@ int main(int, char**)
     // Our state
     bool show_demo_window = true;
     bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(51.0f / 255.0f, 66.0f / 255.0f, 71.0f / 255.0f, 1.0f);
+    ImVec4 clear_color = ImVec4(4.0f / 255.0f, 207.0f / 255.0f, 88.0f / 255.0f, 1.0f);
+    ImVec4 color2 = ImVec4(51.0f / 255.0f, 66.0f / 255.0f, 71.0f / 255.0f, 1.0f);
     bool* showPlot1 = new bool(false);
     bool* showPlot2 = new bool(false);
     bool* showPlot3 = new bool(false);
@@ -282,44 +271,7 @@ int main(int, char**)
         ImGui::End();
 
 
-        /*
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
-
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-            ImGui::End();
-        }
-
-        // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
-            ImGui::End();
-        }
-        */
+        
 
         // Rendering
         ImGui::Render();
