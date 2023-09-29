@@ -26,9 +26,12 @@ From the sensors, we can obtain more accurate values in two ways. One method is 
 ## Task 2
 Basically, I used the Dear ImGui library with the ImPlot extension, which was very useful.
 
-In this task, I created an app where you can view 3 plots based on the CSV files that I got. The first one is a simple one about the time and the speed of our car. 
+In this task, I created an app where you can view 3 plots based on the CSV files that I got. The first one is a simple one about the time and the speed of our car.
+![Plot1](plot1.jpg)
 For the second one, I used the dbw.csv file. Here, you can track the car's speed and the velocity of all the wheels. It shows only the first 15 records from our database because you can see the differences more easily.
+![Plot2](plot2.jpg)
 In the last one, there are the car's accelerations compared with the speed.
+![Plot3](plot3.jpg)
 
 Backend and Renderer: Win32 and DirectX 11
 
