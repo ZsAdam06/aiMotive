@@ -10,7 +10,7 @@ It is simple to run. Just clone my repo and there is the `task1` folder with the
 g++ task1/task1.cpp data/*.cpp
 ```
 
-Then run the executable file. Basically, it is just a console application with some text where you can find information about my answers to the questions.
+Then run the executable file. Basically, it is just a console application with some text where you can find information about my answers to the questions, but I want the complete it right here.
 
 ### a.
 We can encounter various errors in a given database. Firstly, we can consider it an error when we encounter missing data. Furthermore, the measuring instrument can also make errors and possibly transmit false values to us. These values are primarily problematic when they are outliers. So if we come across such data, it may be worth filtering them out or examining what might have happened. There are several methods for this, like the Kalman filter.
