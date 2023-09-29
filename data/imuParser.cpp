@@ -6,7 +6,9 @@
 
 using namespace std;
 
-void imuReader(vector<ImuRecord> *imuD){
+void imuReader(vector<ImuRecord> *imuD, vector<int> *accDigits, vector<int> *gyroDigits){
+    int digitsAfterFloatingPoins = 0;
+    int digitsAfterFloatingPoins_acc = 0;
     ifstream file;
     file.open("./data/imu.csv");
     string line, word;
@@ -23,6 +25,8 @@ void imuReader(vector<ImuRecord> *imuD){
                 imu.timestamp = stold(word);
                 break;
             case 1 :
+                digitsAfterFloatingPoins = word.substr(word.find(".")).length();
+                gyroDigits->push_back(digitsAfterFloatingPoins);
                 imu.gyro_x = stold(word);
                 break;
             case 2 :
@@ -32,6 +36,8 @@ void imuReader(vector<ImuRecord> *imuD){
                 imu.gyro_z = stold(word);
                 break;
             case 4 :
+                digitsAfterFloatingPoins_acc = word.substr(word.find(".")).length();
+                accDigits->push_back(digitsAfterFloatingPoins_acc);
                 imu.acc_x = stold(word);
                 break;
             case 5 :
